@@ -10,6 +10,7 @@ import android.widget.Button;
 public class Welcome extends AppCompatActivity {
     private Button en;
     private Button leaving;
+    private Button enh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,10 +18,20 @@ public class Welcome extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         en=findViewById(R.id.bt1);
         leaving=findViewById(R.id.bt2);
+        enh=findViewById(R.id.bt3);
         en.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent it=new Intent(Welcome.this,MainActivity.class);
+                startActivity(it);
+                finish();
+
+            }
+        });
+        enh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it=new Intent(Welcome.this,SubActivity.class);
                 startActivity(it);
                 finish();
 

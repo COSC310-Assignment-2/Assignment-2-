@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -17,15 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
-
 import butterknife.BindView;
-import opennlp.tools.formats.ad.ADSentenceStream;
-import opennlp.tools.sentdetect.SentenceDetector;
 
 public class MainActivity extends AppCompatActivity {
-    private SentenceDetector sb;
-    private ADSentenceStream.Sentence k;
     private List<msg> Msgs=new ArrayList<msg>();
     private ChatAdapter Adap;
     SimpleDateFormat da=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -34,31 +29,45 @@ public class MainActivity extends AppCompatActivity {
     private msg rep;
     private int turns=0;
     private Button send;
-    public void chat(msg msg,ChatAdapter adap){
+    private int cturn = 0;
+
+    private Stemmer ps = new Stemmer();
+    public void chat(msg msg,ChatAdapter adap) {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        String test=msg.toString();
-        if(turns==0&&(test.contains("I am")||test.contains("I'm")||test.contains("good")||test.contains("fine"))){
-            adap.addItem(new msg(" How many people are there?",0,da.format(new Date())));
-            turns++;}
-        else if(turns==1&&(test.contains("1")||test.contains("2")||test.contains("3")||test.contains("4")||test.contains("5")||test.contains("6")||test.contains("7")||test.contains("8")||test.contains("one")||test.contains("two")||test.contains("three")||test.contains("four")||test.contains("five")||test.contains("six")
+        String test = msg.toString();
+        if (turns == 0 && (test.contains("I am") || test.contains("I'm") || test.contains("good") || test.contains("fine"))) {
+            adap.addItem(new msg(" How many people are there?", 0, da.format(new Date())));
+            turns++;
+        }else if(test.contains("fuck")||test.contains("shit")){
+            adap.addItem(new msg(" Please do not say dirty words.",0,da.format(new Date())));
+        }else if(test.contains("taxi")||test.contains("bus")){
+            adap.addItem(new msg("Please go outside, there are few taxies parking outside of our restaurant.",0,da.format(new Date())));
+        }else if(test.contains("enjoy")||test.contains("bar")||test.contains("play")){
+            adap.addItem(new msg(" Please go to the inquiry desk, it is just at the right corner of our lobby.",0,da.format(new Date())));
+        }else if(test.contains("toilet")||test.contains("washroom")||test.contains("restroom")){
+            adap.addItem(new msg(" Please go this way then turn left to the end of the corridor.",0,da.format(new Date())));
+        }else if(test.contains("ill")||test.contains("sick")||test.contains("cold")){
+            adap.addItem(new msg("Please try some pills, it will help you.",0,da.format(new Date())));
+
+        } else if(turns==1&&(test.contains("1")||test.contains("2")||test.contains("3")||test.contains("4")||test.contains("5")||test.contains("6")||test.contains("7")||test.contains("8")||test.contains("one")||test.contains("two")||test.contains("three")||test.contains("four")||test.contains("five")||test.contains("six")
                     ||test.contains(" seven")||test.contains(" eight")||test.contains("nine")||test.contains("ten")||test.contains("9"))){
                         adap.addItem(new msg(" Is this your first time coming to our restaurant?",0,da.format(new Date())));
                         turns++;
-
-            }
+        }
         else if(turns==2&&test.contains("Yes")){
             adap.addItem(new msg(" I am going to suggest our chef special for today.\n They are:\n A\nB\nC\nD",0,da.format(new Date())));
             turns++;
+            cturn++;
 
         }else if(turns==2&&test.contains("No")){
             adap.addItem(new msg(" Do you want to order together or separate",0,da.format(new Date())));
             turns++;
-
-        }else if(turns==3&&(test.contains("Together")||test.contains("Separate")||test.contains("separate")||test.contains("together"))){
+            cturn++;
+        }else if((turns==3)&&(test.contains("Together")||test.contains("Separate")||test.contains("separate")||test.contains("together"))){
             adap.addItem(new msg(" I am going to suggest our chef special for today.\n They are:\n A\nB\nC\nD",0,da.format(new Date())));
         }else if((turns>=3&&turns<5)&&(test.contains("A")||test.contains("B")||test.contains("C")||test.contains("D"))){
             adap.addItem(new msg(" Do you want to order anything else specific? ",0,da.format(new Date())));
@@ -183,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
                 msg respon;
                 String content = content1.getText().toString();
                 rep=new msg(content, 1, da.format(new Date()));
-                sb.sentPosDetect("");
 
                 Adap.addItem(rep);
                 chatlist.scrollToPosition(Adap.getItemCount()-1);
