@@ -11,6 +11,7 @@ public class Welcome extends AppCompatActivity {
     private Button en;
     private Button leaving;
     private Button enh;
+    private Button chat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,7 @@ public class Welcome extends AppCompatActivity {
         en=findViewById(R.id.bt1);
         leaving=findViewById(R.id.bt2);
         enh=findViewById(R.id.bt3);
+        chat=findViewById(R.id.bt4);
         en.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,6 +43,14 @@ public class Welcome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it=new Intent(Welcome.this,chatroom.class);
+                startActivity(it);
+
             }
         });
 

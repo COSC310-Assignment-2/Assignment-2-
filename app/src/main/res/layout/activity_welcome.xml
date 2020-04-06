@@ -68,4 +68,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bt3"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bt4"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="Go chat with others"
+        app:layout_constraintEnd_toEndOf="@+id/bt2"
+        app:layout_constraintStart_toStartOf="@+id/bt2"
+        app:layout_constraintTop_toBottomOf="@+id/bt2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

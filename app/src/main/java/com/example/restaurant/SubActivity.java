@@ -101,22 +101,22 @@ public class SubActivity extends AppCompatActivity {
         } else if (turns == 3 && (test.contains("yes") || test.contains("sorry"))) {
             adap.addItem(new msg(" What room type you want?\n Pls select your desired room type. Here is our available room type: \n single room\n double room\n triple room\n suite", 0, da.format(new Date())));
             turns++;
-        } else if (turns == 3 && test.contains("sorry")) {
-            adap.addItem(new msg("wait", 0, da.format(new Date())));
-            turns++;
-        } else if (turns == 4 && test.contains("sorry")) {
+        } else if (turns == 3 ) {
             adap.addItem(new msg("Please wait for a second.", 0, da.format(new Date())));
             turns++;
-        } else if (turns == 5 && test.contains("sorry")) {
+        } else if (turns == 4 ) {
+            adap.addItem(new msg("Please wait for a second.", 0, da.format(new Date())));
+            turns++;
+        } else if (turns == 5 ) {
             adap.addItem(new msg("Do you have the reservation?", 0, da.format(new Date())));
             turns++;
-        } else if (turns == 6 && test.contains("yes") || test.contains("sorry")) {
+        } else if (turns == 6 && test.contains("yes") ) {
             adap.addItem(new msg("Give us one second, we are checking the data. Pls confirm your reservation: one double room.", 0, da.format(new Date())));
             turns++;
-        } else if (turns == 6 && (test.contains("no") || test.contains("sorry"))) {
+        } else if (turns == 6 && test.contains("no") ) {
             adap.addItem(new msg("Please wait for a second.", 0, da.format(new Date())));
             turns++;
-        } else if (turns == 7 && (test.contains("confirm") || test.contains("sorry"))) {
+        } else if (turns == 7 && test.contains("confirm") ) {
             adap.addItem(new msg("Please wait for a second.", 0, da.format(new Date())));
             turns++;
         } else if (turns == 7 && (test.contains("wrong room"))) {
@@ -126,7 +126,7 @@ public class SubActivity extends AppCompatActivity {
             adap.addItem(new msg("Check and proceed", 0, da.format(new Date())));
             turns++;
         } else if (turns == 8 && !test.contains("111")) {
-            adap.addItem(new msg("Enter again or go back to last loop", 0, da.format(new Date())));
+            adap.addItem(new msg("Please enter the correct code", 0, da.format(new Date())));
             turns++;
         } else if (turns == 9) {
             adap.addItem(new msg("Do you want to live near the lake?", 0, da.format(new Date())));

@@ -5,23 +5,42 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
-import android.graphics.PorterDuff;
+import android.content.res.AssetFileDescriptor;
+import android.content.res.AssetManager;
+
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import butterknife.BindView;
+import opennlp.tools.namefind.NameFinderME;
+import opennlp.tools.namefind.TokenNameFinderModel;
+import opennlp.tools.stemmer.PorterStemmer;
+import opennlp.tools.tokenize.TokenizerModel;
+
+import opennlp.tools.util.Span;
+
 
 public class MainActivity extends AppCompatActivity {
+    PorterStemmer porterStemmer;
     private List<msg> Msgs=new ArrayList<msg>();
+    private NameFinderME nameFinderME;
     private ChatAdapter Adap;
     SimpleDateFormat da=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private RecyclerView chatlist;
@@ -29,18 +48,40 @@ public class MainActivity extends AppCompatActivity {
     private msg rep;
     private int turns=0;
     private Button send;
-    private int cturn = 0;
+    InputStream inputStream ;
+    String myname;
 
-    private Stemmer ps = new Stemmer();
     public void chat(msg msg,ChatAdapter adap) {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         String test = msg.toString();
+        String[] respon=new String[1];
+        respon[0]=rep.getContent();
+
         if (turns == 0 && (test.contains("I am") || test.contains("I'm") || test.contains("good") || test.contains("fine"))) {
-            adap.addItem(new msg(" How many people are there?", 0, da.format(new Date())));
+//            try {
+//
+//
+//
+//                inputStream = getAssets ( ).open ("en-ner-person.bin");
+//                Log.e("name","1");
+//                TokenNameFinderModel tokenModel =
+//                        new TokenNameFinderModel(inputStream);
+//                Log.e("name","2");
+//                nameFinderME = new NameFinderME(tokenModel);
+//                Log.e("name","3");
+//                Span nameSpans[] = nameFinderME.find(respon);
+//                Log.e("name",nameSpans.toString());
+//                myname=nameSpans[0].toString();
+//                Log.e("nname",nameSpans.toString());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+            adap.addItem(new msg("Ok "+myname+"! How many people are there?" , 0, da.format(new Date())));
             turns++;
         }else if(test.contains("fuck")||test.contains("shit")){
             adap.addItem(new msg(" Please do not say dirty words.",0,da.format(new Date())));
@@ -61,12 +102,12 @@ public class MainActivity extends AppCompatActivity {
         else if(turns==2&&test.contains("Yes")){
             adap.addItem(new msg(" I am going to suggest our chef special for today.\n They are:\n A\nB\nC\nD",0,da.format(new Date())));
             turns++;
-            cturn++;
+
 
         }else if(turns==2&&test.contains("No")){
             adap.addItem(new msg(" Do you want to order together or separate",0,da.format(new Date())));
             turns++;
-            cturn++;
+
         }else if((turns==3)&&(test.contains("Together")||test.contains("Separate")||test.contains("separate")||test.contains("together"))){
             adap.addItem(new msg(" I am going to suggest our chef special for today.\n They are:\n A\nB\nC\nD",0,da.format(new Date())));
         }else if((turns>=3&&turns<5)&&(test.contains("A")||test.contains("B")||test.contains("C")||test.contains("D"))){
@@ -172,15 +213,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         chatlist=findViewById(R.id.rv_chatList);
         content1=findViewById(R.id.et_content);
         send=findViewById(R.id.bt_send);
+
+
+
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         chatlist.setLayoutManager(linearLayoutManager);
         Date curDate =  new Date(System.currentTimeMillis());
-        msg start=new msg("Hi, how are you today?", 0,da.format(new Date()));
+        msg start=new msg("Hi, how are you today? May I get your name?", 0,da.format(new Date()));
         Msgs.add(start);
 
         Adap=new ChatAdapter(this,Msgs);
@@ -189,9 +235,13 @@ public class MainActivity extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                msg respon;
+
+
                 String content = content1.getText().toString();
-                rep=new msg(content, 1, da.format(new Date()));
+                porterStemmer = new PorterStemmer();
+                String stem = porterStemmer.stem(content);
+                rep=new msg(stem, 1, da.format(new Date()));
+
 
                 Adap.addItem(rep);
                 chatlist.scrollToPosition(Adap.getItemCount()-1);
@@ -202,10 +252,6 @@ public class MainActivity extends AppCompatActivity {
                         chatlist.scrollToPosition(Adap.getItemCount()-1);//execute the task
                     }
                 }, 500);
-
-
-
-
             }
         });
         chatlist.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -218,14 +264,5 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
-
-
-
-
-
-
     }
 }
