@@ -27,4 +27,5 @@ added features here:
 7 name entity recognition does the specific name check
 8 conversation with another agent allows to do the more communication and features.
 
+We used socket with group 9.
 
