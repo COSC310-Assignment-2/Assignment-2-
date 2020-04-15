@@ -26,7 +26,7 @@ public class Welcome extends AppCompatActivity {
             public void onClick(View v) {
                 Intent it=new Intent(Welcome.this,MainActivity.class);
                 startActivity(it);
-                finish();
+
 
             }
         });
@@ -35,7 +35,7 @@ public class Welcome extends AppCompatActivity {
             public void onClick(View v) {
                 Intent it=new Intent(Welcome.this,SubActivity.class);
                 startActivity(it);
-                finish();
+
 
             }
         });

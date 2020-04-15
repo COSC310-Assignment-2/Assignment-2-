@@ -15,7 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-
+import android.widget.Toast;
 
 
 import java.io.File;
@@ -80,8 +80,9 @@ public class MainActivity extends AppCompatActivity {
 //                Log.e("nname",nameSpans.toString());
 //            } catch (IOException e) {
 //                e.printStackTrace();
-//            }
-            adap.addItem(new msg("Ok "+myname+"! How many people are there?" , 0, da.format(new Date())));
+//            }3
+
+            adap.addItem(new msg("Ok "+"! How many people are there?" , 0, da.format(new Date())));
             turns++;
         }else if(test.contains("fuck")||test.contains("shit")){
             adap.addItem(new msg(" Please do not say dirty words.",0,da.format(new Date())));
@@ -238,10 +239,12 @@ public class MainActivity extends AppCompatActivity {
 
 
                 String content = content1.getText().toString();
+                if(content==null){
+                    Toast.makeText(getApplicationContext(),"Please enter your answer.",Toast.LENGTH_SHORT).show();
+                }else{
                 porterStemmer = new PorterStemmer();
                 String stem = porterStemmer.stem(content);
                 rep=new msg(stem, 1, da.format(new Date()));
-
 
                 Adap.addItem(rep);
                 chatlist.scrollToPosition(Adap.getItemCount()-1);
@@ -252,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
                         chatlist.scrollToPosition(Adap.getItemCount()-1);//execute the task
                     }
                 }, 500);
-            }
+            }}
         });
         chatlist.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
